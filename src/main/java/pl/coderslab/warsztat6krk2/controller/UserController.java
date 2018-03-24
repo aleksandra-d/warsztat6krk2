@@ -1,5 +1,8 @@
 package pl.coderslab.warsztat6krk2.controller;
 
+import java.util.List;
+
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +14,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.context.request.WebRequest;
 
 import pl.coderslab.warsztat6krk2.entity.User;
 import pl.coderslab.warsztat6krk2.model.UserDTO;
@@ -33,7 +38,7 @@ public class UserController {
 	public String registerPost(@Valid @ModelAttribute User user, BindingResult br) {
 		this.userRepository.save(user);
 		
-		return "redirect:/login";
+		return "redirect:/user/login";
 	}
 	
 	@GetMapping("/login")
@@ -49,7 +54,13 @@ public class UserController {
 			m.addAttribute("loggedInUser", u);
 			return "redirect:/";
 		}
-		return "redirect:/login";
+		return "redirect:/user/login";
 	}
 	
+	@GetMapping("/logout")
+	public String logout(SessionStatus status) {
+		status.setComplete();
+		
+		return "redirect:/";
+	}
 }
